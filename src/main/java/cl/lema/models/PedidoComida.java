@@ -1,17 +1,25 @@
 package cl.lema.models;
 
 /**
- * Representa un pedido de comida realizado a un restaurante.
+ * Representa un pedido de comida realizado a un restaurante que también tiene un tiempo de preparación.
  */
 public class PedidoComida extends Pedido {
 
     private String restaurante;
     private String tiempoPreparacion;
 
-    public PedidoComida(int idPedido, String cliente, String direccion, String restaurante, String tiempoPreparacion) {
-        super(idPedido, cliente, direccion);
+    public PedidoComida(int idPedido, String cliente, String direccionEntrega, double distanciaKm, String restaurante, String tiempoPreparacion) {
+        super(idPedido, cliente, direccionEntrega, distanciaKm);
         this.restaurante = restaurante;
         this.tiempoPreparacion = tiempoPreparacion;
+    }
+
+    @Override
+    public int calcularTiempoEntrega() {
+        double tiempoBase = 15;
+        double tiempoExtra = 2 * distanciaKm;
+        double resultado = tiempoExtra + tiempoBase;
+        return (int) Math.round(resultado);
     }
 
     @Override

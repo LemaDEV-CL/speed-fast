@@ -1,6 +1,7 @@
 # Speed Fast
 
-Proyecto básico en Java para practicar conceptos de Programación Orientada a Objetos mediante un sistema de asignación de repartidores para distintos tipos de pedidos.
+- Semana 1 - Proyecto básico en Java para practicar conceptos de Programación Orientada a Objetos mediante un sistema de asignación de repartidores para distintos tipos de pedidos.
+- Semana 2 - Se aplica principio del uso de clases abstractas a través de la clase `Pedido` y su función `calcularTiempoEntrega` que la heredan sus clases hijas.  
 
 ## Conceptos aplicados
 

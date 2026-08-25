@@ -1,77 +1,42 @@
 package cl.lema.app;
 
-import cl.lema.models.Pedido;
-import cl.lema.models.PedidoComida;
-import cl.lema.models.PedidoEncomienda;
-import cl.lema.models.PedidoExpress;
-
-import java.util.ArrayList;
-import java.util.List;
+import cl.lema.models.*;
 
 /**
- * Ejecuta ejemplos de herencia, polimorfismo, sobreescritura y sobrecarga
+ * Ejecuta ejemplo de clase padre abstracta
  * mediante distintos tipos de pedidos.
  */
 public class Main {
 
     public static void main(String[] args) {
 
-        boolean urgente = true;
-        boolean prioritario = true;
-        int horaLimite = 20;
-
-        String tipoComida = "Comida";
-        String tipoEncomienda = "Encomienda";
-        String tipoExpress = "Express";
-
-        PedidoComida pedidoComida = new PedidoComida(
-                1,
-                "Andres21",
-                "Casablanca 1821, Maipu",
-                "Piccola",
-                "30 minutos"
-        );
-
-        PedidoEncomienda pedidoEncomienda = new PedidoEncomienda(
-                2,
-                "MartinaLema1",
-                "Pedro Prado 123",
-                2,
-                4
-        );
-
-        PedidoExpress pedidoExpress = new PedidoExpress(
+        Pedido[] pedidos = {
+        new PedidoComida (
+                1521,
+                "Juan Cliente",
+                "Hugo Bravo 94, Maipú",
                 3,
-                "Carlos3921",
-                "Hugo Bravo 94, Maipu",
-                "H&M",
-                2
-        );
+                "Piccola",
+                "30"
+        ),
+        new PedidoEncomienda (
+                2213,
+                "Huguito Lema",
+                "Lasagna 2134, Pudahuel",
+                3.5,
+                23
+        ),
+        new PedidoExpress (5543,
+                "Renato Apurado",
+                "Pajaritos 2251, Maipú",
+                3.4,
+                "La comida mas rápida"
+        )};
 
-        List<Pedido> pedidos = new ArrayList<>();
-        pedidos.add(pedidoComida);
-        pedidos.add(pedidoEncomienda);
-        pedidos.add(pedidoExpress);
-
-        System.out.println("=== SOBRESCRITURA Y POLIMORFISMO ===");
-
+        System.out.println("...::: Listado de pedidos :::... \n");
         for (Pedido pedido : pedidos) {
-            System.out.println("\n" + pedido.getClass().getSimpleName());
-            System.out.println(pedido.asignarRepartidor());
+            pedido.mostrarResumen();
+            System.out.println("\n");
         }
-
-        System.out.println("\n=== SOBRECARGA DE METODOS ===");
-
-        System.out.println("\nPedidoComida");
-        System.out.println(pedidoComida.asignarRepartidor(tipoComida));
-        System.out.println(pedidoComida.asignarRepartidor(urgente));
-
-        System.out.println("\nPedidoEncomienda");
-        System.out.println(pedidoEncomienda.asignarRepartidor(tipoEncomienda));
-        System.out.println(pedidoEncomienda.asignarRepartidor(prioritario));
-
-        System.out.println("\nPedidoExpress");
-        System.out.println(pedidoExpress.asignarRepartidor(tipoExpress));
-        System.out.println(pedidoExpress.asignarRepartidor(horaLimite));
     }
 }
