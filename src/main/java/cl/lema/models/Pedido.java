@@ -1,23 +1,26 @@
 package cl.lema.models;
 
-import cl.lema.interfaces.Asignable;
-
 /**
- * Clase abstracta que representa un pedido general con los datos ID del cliente con dirección y distancia de su ubicación en kms.
+ * Clase abstracta que contiene los datos comunes de todos los pedidos.
+ * Cada tipo de pedido debe calcular su propio tiempo de entrega.
  */
-public abstract class Pedido implements Asignable {
+public abstract class Pedido {
 
     protected int idPedido;
     protected String cliente;
     protected String direccionEntrega;
     protected double distanciaKm;
+    protected String repartidorAsignado;
+    protected boolean cancelado = false;
 
-    public Pedido(int idPedido, String cliente, String direccionEntrega, double distanciaKm) {
+    public Pedido(int idPedido, String cliente, String direccionEntrega, double distanciaKm, String repartidorAsignado) {
         this.idPedido = idPedido;
         this.cliente = cliente;
         this.direccionEntrega = direccionEntrega;
         this.distanciaKm = distanciaKm;
+        this.repartidorAsignado = repartidorAsignado;
     }
+
 
     public int getIdPedido() {
         return idPedido;
@@ -35,21 +38,33 @@ public abstract class Pedido implements Asignable {
         return distanciaKm;
     }
 
-    public abstract int calcularTiempoEntrega();
+    public String getRepartidorAsignado() {
+        return repartidorAsignado;
+    }
 
+    public boolean isCancelado() { return cancelado; }
+
+    public void setCancelado(boolean cancelado) { this.cancelado = cancelado; }
+
+    /**
+     * Muestra en consola los datos principales y el tiempo estimado del pedido.
+     */
     public void mostrarResumen() {
         System.out.println("ID: " + getIdPedido());
         System.out.println("Cliente: " + getCliente());
         System.out.println("Direccion: " + getDireccion());
         System.out.println("Distancia Km: " + getDistanciaKm());
+        System.out.println("Repartidor Asignado: " + getRepartidorAsignado());
         System.out.println("Tiempo de entrega: " + calcularTiempoEntrega() + " minutos aprox.");
+        System.out.println("");
     }
 
-    @Override
-    public String asignarRepartidor() {
-        return "Asignando pedido";
-    }
-    public String asignarRepartidor(String tipo) {
-        return "Tipo de pedido asignado: " + tipo;
-    }
+    /**
+     * Calcula el tiempo de entrega según el tipo de pedido.
+     *
+     * @return tiempo aproximado de entrega en minutos
+     */
+    public abstract int calcularTiempoEntrega();
+
+
 }
