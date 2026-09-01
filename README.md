@@ -1,45 +1,81 @@
 # Speed Fast
 
-Proyecto básico en Java que simula la gestión de pedidos de la empresa Speed Fast. El programa crea pedidos de comida, encomienda y express, para luego asignarlos, despacharlos, cancelarlos o registrarlos como entregados.
+Proyecto desarrollado en Java para practicar los contenidos de Programación Orientada a Objetos vistos durante las primeras semanas de la asignatura.
+
+El programa representa un sistema simple de pedidos de la empresa ficticia **Speed Fast**, utilizando distintos tipos de pedidos como comida, encomienda y express. Cada pedido puede realizar distintas acciones, por ejemplo asignar un repartidor, despacharse, cancelarse o registrar su entrega, según corresponda.
 
 ## Avance por semana
 
-- Semana 1: creación del proyecto para practicar conceptos de Programación Orientada a Objetos mediante un sistema de pedidos y repartidores.
-- Semana 2: uso de la clase abstracta `Pedido` y del método `calcularTiempoEntrega()`, que se implementa de forma distinta en cada clase hija.
-- Semana 3: actualización para la sumativa n°1. Se agregan interfaces y un controlador de envíos para separar las responsabilidades del programa.
+- **Semana 1:** creación del proyecto y de las primeras clases para representar pedidos y repartidores.
+- **Semana 2:** uso de herencia mediante la clase `Pedido` y sus clases hijas. También se incorpora el método abstracto `calcularTiempoEntrega()`, implementado de forma diferente según el tipo de pedido.
+- **Semana 3:** incorporación de interfaces para representar las distintas acciones que puede realizar un pedido y uso de un controlador para ejecutar estas acciones.
 
 ## Conceptos aplicados
 
-- Herencia entre `Pedido` y sus clases derivadas.
-- Polimorfismo al trabajar con distintos pedidos mediante el tipo `Pedido`.
-- Clase y método abstracto para calcular los tiempos de entrega.
-- Sobreescritura de métodos según cada tipo de pedido.
-- Uso de las interfaces `Asignable`, `Despachable`, `Cancelable` y `Rastreable`.
-- Encapsulamiento de los datos del pedido mediante atributos y métodos de acceso.
-- Uso de `instanceof` para comprobar qué acciones puede realizar cada pedido.
+Durante el desarrollo se aplican los siguientes contenidos vistos en clases:
 
-## Clases e interfaces
+- Clases y objetos.
+- Encapsulamiento mediante atributos y métodos de acceso.
+- Herencia entre `Pedido` y sus clases hijas.
+- Clase y método abstracto.
+- Sobreescritura de métodos con `@Override`.
+- Polimorfismo al trabajar con distintos tipos de pedidos mediante la clase `Pedido`.
+- Interfaces para definir acciones que pueden realizar algunos pedidos.
+- Uso de `instanceof` para comprobar si un pedido implementa una determinada interfaz antes de ejecutar una acción.
+- Uso de arreglos para almacenar y recorrer distintos pedidos.
 
-- `Main`: crea los pedidos y ejecuta el ejemplo en consola.
-- `Pedido`: clase abstracta que guarda los datos comunes de todos los pedidos.
-- `PedidoComida`: representa pedidos de comida.
-- `PedidoEncomienda`: representa pedidos de encomiendas.
-- `PedidoExpress`: representa pedidos express.
-- `ControladorDeEnvios`: asigna, despacha, cancela y registra las entregas.
-- `Asignable`: define la acción de asignar un repartidor.
-- `Despachable`: define la acción de despachar un pedido.
-- `Cancelable`: define la acción de cancelar un pedido.
-- `Rastreable`: define la consulta del historial de entregas.
+## Clases principales
+
+- `Main`: crea los pedidos de ejemplo y ejecuta las distintas acciones del programa.
+- `Pedido`: clase abstracta que contiene los datos y comportamientos comunes de los pedidos.
+- `PedidoComida`: representa un pedido realizado a un restaurante.
+- `PedidoEncomienda`: representa el envío de una encomienda.
+- `PedidoExpress`: representa un pedido con entrega express.
+- `ControladorDeEnvios`: contiene métodos para realizar acciones sobre los pedidos, como asignar, despachar, cancelar o registrar una entrega.
+
+## Interfaces
+
+- `Asignable`: permite asignar un repartidor.
+- `Despachable`: permite despachar un pedido.
+- `Cancelable`: permite cancelar un pedido cuando corresponda.
+- `Rastreable`: permite realizar las acciones de seguimiento definidas en el proyecto.
+
+No todos los tipos de pedido tienen necesariamente las mismas acciones. Por este motivo, antes de realizar algunas operaciones se utiliza `instanceof` para comprobar si el pedido implementa la interfaz correspondiente.
 
 ## Funcionamiento
 
-Al ejecutar el programa se crean tres pedidos de ejemplo. Para cada uno se muestra su información y el tiempo aproximado de entrega. El controlador realiza las acciones permitidas por sus interfaces, cancela el pedido indicado en `Main` y finalmente muestra el historial de las entregas completadas.
+Al ejecutar el programa se crean distintos pedidos de ejemplo y se recorren mediante un arreglo de tipo `Pedido`.
 
-## Ejecución
+Para cada pedido se muestra su información y se realizan solamente las acciones que correspondan según las interfaces que implemente. Finalmente, el programa puede mostrar el historial registrado por el controlador.
 
-El proyecto utiliza Maven y requiere Java 23. Desde la carpeta principal se pueden usar los siguientes comandos:
+## Requisitos
+
+- Java 23.
+- Maven.
+- Un IDE para Java, por ejemplo IntelliJ IDEA.
+
+## Cómo ejecutar el proyecto
+
+### Opción 1: desde IntelliJ IDEA
+
+1. Clonar o descargar este repositorio.
+2. Abrir la carpeta del proyecto en IntelliJ IDEA.
+3. Esperar a que IntelliJ cargue el proyecto Maven.
+4. Abrir la clase `Main.java`.
+5. Ejecutar el método `main()`.
+
+### Opción 2: desde PowerShell
+
+Desde la carpeta principal del proyecto, donde se encuentra el archivo `pom.xml`:
+
+```powershell
+mvn compile
+mvn exec:java "-Dexec.mainClass=cl.lema.app.Main"
+```
+
+## Clonar el repositorio
 
 ```bash
-mvn compile
-mvn exec:java -Dexec.mainClass="cl.lema.app.Main"
+git clone https://github.com/LemaDEV-CL/speed-fast.git
+cd speed-fast
 ```
