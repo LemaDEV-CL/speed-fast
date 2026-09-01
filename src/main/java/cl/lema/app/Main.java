@@ -12,11 +12,6 @@ import cl.lema.servicio.ControladorDeEnvios;
  */
 public class Main {
 
-    /**
-     * Inicia el programa y muestra en consola el proceso de los pedidos.
-     *
-     * @param args argumentos recibidos al ejecutar el programa
-     */
     public static void main(String[] args) {
 
         ControladorDeEnvios controlador = new ControladorDeEnvios();
@@ -52,8 +47,6 @@ public class Main {
                 "Needle"
         )};
 
-
-
         for (Pedido pedido : pedidos) {
             System.out.println("=== Resumen pedido #" + pedido.getIdPedido() + " ===");
             pedido.mostrarResumen();
@@ -81,7 +74,6 @@ public class Main {
                 controlador.registrarEntrega(pedido);
                 System.out.println();
             }
-
         }
         controlador.verHistorial();
     }
