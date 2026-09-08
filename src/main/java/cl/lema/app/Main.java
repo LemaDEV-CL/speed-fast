@@ -1,80 +1,107 @@
 package cl.lema.app;
 
-import cl.lema.interfaces.Asignable;
-import cl.lema.interfaces.Cancelable;
-import cl.lema.interfaces.Despachable;
 import cl.lema.models.*;
-import cl.lema.servicio.ControladorDeEnvios;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Clase principal que ejecuta un ejemplo del sistema Speed Fast.
- * Crea distintos tipos de pedidos y usa el controlador para procesarlos.
+ * Clase principal del sistema SpeedFast.
+ * Crea pedidos y repartidores de ejemplo y ejecuta sus entregas de forma concurrente
+ * mediante un ExecutorService.
  */
 public class Main {
 
     public static void main(String[] args) {
 
-        ControladorDeEnvios controlador = new ControladorDeEnvios();
-        int cancelarID = 328;
+        Pedido pedido1 = new PedidoComida(
+                101,
+                "Juan Pérez",
+                "Av. Pajaritos 2500",
+                4.5,
+                "Camila",
+                "McDonalds",
+                15
+        );
 
-        Pedido[] pedidos = {
-        new PedidoComida(
-                232,
-                "Juan",
-                "Hugo Bravo 94",
-                3,
-                "Speedy",
-                "Piccola",
-                30
-        ),
+        Pedido pedido2 = new PedidoExpress(
+                102,
+                "María Soto",
+                "Las Parcelas 1800",
+                6.2,
+                "Camila",
+                "Falabella"
+        );
 
-        new PedidoEncomienda(
-                328,
-                "Andres cliente",
-                "Pajaritos 368",
+        Pedido pedido3 = new PedidoEncomienda(
+                201,
+                "Carlos Díaz",
+                "Alameda 1500",
+                5,
+                "Luis",
                 4,
-                "Spiderman",
-                3,
-                9
-        ),
+                8
+        );
 
-        new PedidoExpress(
-                475,
-                "Diego Apurado",
-                "Alameda 265",
-                6,
-                "Carlos Moto",
-                "Needle"
-        )};
+        Pedido pedido4 = new PedidoComida(
+                202,
+                "Ana Torres",
+                "Las Rejas 850",
+                3.7,
+                "Luis",
+                "Domino",
+                20
+        );
 
-        for (Pedido pedido : pedidos) {
-            System.out.println("=== Resumen pedido #" + pedido.getIdPedido() + " ===");
-            pedido.mostrarResumen();
+        Pedido pedido5 = new PedidoExpress(
+                301,
+                "Felipe Rojas",
+                "Providencia 2200",
+                7,
+                "Pedro",
+                "Paris"
+        );
 
-            System.out.println("=== Estado del envío #" + pedido.getIdPedido() + " ===");
+        Pedido pedido6 = new PedidoEncomienda(
+                302,
+                "Laura González",
+                "Irarrázaval 1350",
+                5.5,
+                "Pedro",
+                2,
+                6
+        );
 
-            if (pedido instanceof Asignable asignable) {
-                controlador.asignarPedido(asignable);
+        List<Pedido> pedidosCamila = List.of(pedido1, pedido2);
+        List<Pedido> pedidosLuis = List.of(pedido3, pedido4);
+        List<Pedido> pedidosPedro = List.of(pedido5, pedido6);
+
+        Repartidor camila = new Repartidor("Camila", pedidosCamila);
+        Repartidor luis = new Repartidor("Luis", pedidosLuis);
+        Repartidor pedro = new Repartidor("Pedro", pedidosPedro);
+
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        executor.execute(camila);
+        executor.execute(luis);
+        executor.execute(pedro);
+        executor.shutdown();
+
+        try {
+
+            boolean finalizado = executor.awaitTermination(1, TimeUnit.MINUTES);
+            if (finalizado) {
+                System.out.println("=== Todos los repartidores finalizaron ===");
+            } else {
+                System.out.println("=== La simulación no finalizó dentro del tiempo esperado ===");
             }
 
-            if (pedido instanceof Despachable despachable) {
-                controlador.despacharPedido(despachable);
-            }
+        } catch (InterruptedException e) {
 
-            if (pedido instanceof Cancelable cancelable) {
-                if (pedido.getIdPedido() == cancelarID) {
-                    System.out.println("Cancelando pedido...");
-                    controlador.cancelarPedido(cancelable);
-                    pedido.setCancelado(true);
-                    System.out.println();
-                }
-            }
-
-            if (pedido.isCancelado() == false) {
-                controlador.registrarEntrega(pedido);
-                System.out.println();
-            }
+            Thread.currentThread().interrupt();
+            System.out.println("=== La ejecución principal fue interrumpida ===");
         }
-        controlador.verHistorial();
     }
 }

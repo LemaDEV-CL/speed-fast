@@ -1,37 +1,41 @@
 # Speed Fast
 
-Proyecto desarrollado en Java para practicar los contenidos de Programación Orientada a Objetos vistos durante las primeras semanas de la asignatura.
+Proyecto desarrollado en Java para practicar los contenidos de Programación Orientada a Objetos de la asignatura.
 
-El programa representa un sistema simple de pedidos de la empresa ficticia **Speed Fast**, utilizando distintos tipos de pedidos como comida, encomienda y express. Cada pedido puede realizar distintas acciones, por ejemplo asignar un repartidor, despacharse, cancelarse o registrar su entrega, según corresponda.
+El programa representa un sistema simple de pedidos de la empresa ficticia **Speed Fast**, utilizando distintos tipos de pedidos como comida, encomienda y express.
 
 ## Avance por semana
 
 - **Semana 1:** creación del proyecto y de las primeras clases para representar pedidos y repartidores.
 - **Semana 2:** uso de herencia mediante la clase `Pedido` y sus clases hijas. También se incorpora el método abstracto `calcularTiempoEntrega()`, implementado de forma diferente según el tipo de pedido.
 - **Semana 3:** incorporación de interfaces para representar las distintas acciones que puede realizar un pedido y uso de un controlador para ejecutar estas acciones.
+- **Semana 4:** incorporación de concurrencia. Cada `Repartidor` implementa `Runnable` y procesa su propia lista de pedidos. Los repartidores se ejecutan de forma simultánea mediante `ExecutorService` y se utiliza `Thread.sleep()` para simular tiempos de entrega aleatorios.
 
 ## Conceptos aplicados
-
-Durante el desarrollo se aplican los siguientes contenidos vistos en clases:
 
 - Clases y objetos.
 - Encapsulamiento mediante atributos y métodos de acceso.
 - Herencia entre `Pedido` y sus clases hijas.
 - Clase y método abstracto.
 - Sobreescritura de métodos con `@Override`.
-- Polimorfismo al trabajar con distintos tipos de pedidos mediante la clase `Pedido`.
-- Interfaces para definir acciones que pueden realizar algunos pedidos.
-- Uso de `instanceof` para comprobar si un pedido implementa una determinada interfaz antes de ejecutar una acción.
-- Uso de arreglos para almacenar y recorrer distintos pedidos.
+- Polimorfismo mediante la clase `Pedido`.
+- Interfaces para definir comportamientos.
+- Listas de objetos con `List`.
+- Implementación de `Runnable`.
+- Programación concurrente con múltiples hilos.
+- Uso de `Thread.sleep()` para simular tiempos de ejecución.
+- Administración de tareas concurrentes mediante `ExecutorService`.
+- Manejo de `InterruptedException`.
 
 ## Clases principales
 
-- `Main`: crea los pedidos de ejemplo y ejecuta las distintas acciones del programa.
+- `Main`: crea los pedidos y repartidores de ejemplo y administra la ejecución concurrente.
 - `Pedido`: clase abstracta que contiene los datos y comportamientos comunes de los pedidos.
 - `PedidoComida`: representa un pedido realizado a un restaurante.
 - `PedidoEncomienda`: representa el envío de una encomienda.
 - `PedidoExpress`: representa un pedido con entrega express.
-- `ControladorDeEnvios`: contiene métodos para realizar acciones sobre los pedidos, como asignar, despachar, cancelar o registrar una entrega.
+- `Repartidor`: implementa `Runnable` y procesa secuencialmente los pedidos que tiene asignados.
+- `ControladorDeEnvios`: contiene funcionalidades desarrolladas durante la Semana 3 para trabajar con las acciones de los pedidos.
 
 ## Interfaces
 
@@ -40,13 +44,11 @@ Durante el desarrollo se aplican los siguientes contenidos vistos en clases:
 - `Cancelable`: permite cancelar un pedido cuando corresponda.
 - `Rastreable`: permite realizar las acciones de seguimiento definidas en el proyecto.
 
-No todos los tipos de pedido tienen necesariamente las mismas acciones. Por este motivo, antes de realizar algunas operaciones se utiliza `instanceof` para comprobar si el pedido implementa la interfaz correspondiente.
+## Funcionamiento actual
 
-## Funcionamiento
+Al ejecutar el programa se crean seis pedidos y se distribuyen entre tres repartidores: Camila, Luis y Pedro. Cada repartidor recibe dos pedidos y los procesa secuencialmente.
 
-Al ejecutar el programa se crean distintos pedidos de ejemplo y se recorren mediante un arreglo de tipo `Pedido`.
-
-Para cada pedido se muestra su información y se realizan solamente las acciones que correspondan según las interfaces que implemente. Finalmente, el programa puede mostrar el historial registrado por el controlador.
+Los tres repartidores son enviados a un `ExecutorService` con tres hilos, permitiendo que trabajen de forma concurrente. Cada entrega utiliza una pausa aleatoria para simular su duración. Finalmente, el programa espera a que todos los repartidores terminen antes de cerrar la simulación.
 
 ## Requisitos
 
