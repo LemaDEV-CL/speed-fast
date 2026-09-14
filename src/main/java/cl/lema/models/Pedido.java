@@ -2,7 +2,8 @@ package cl.lema.models;
 
 /**
  * Clase abstracta que contiene los datos comunes de todos los pedidos.
- * Cada tipo de pedido debe calcular su propio tiempo de entrega.
+ * Cada tipo de pedido debe calcular su propio tiempo de entrega mediante
+ * la implementación del método abstracto calcularTiempoEntrega().
  */
 public abstract class Pedido {
 
@@ -10,41 +11,78 @@ public abstract class Pedido {
     protected String cliente;
     protected String direccionEntrega;
     protected double distanciaKm;
-    protected String repartidorAsignado;
-    protected boolean cancelado = false;
+    protected EstadoPedido estado;
 
-    public Pedido(int idPedido, String cliente, String direccionEntrega, double distanciaKm, String repartidorAsignado) {
+    /**
+     * Crea un pedido con sus datos principales y lo deja en estado pendiente.
+     *
+     * @param idPedido identificador único del pedido
+     * @param cliente nombre del cliente que recibe el pedido
+     * @param direccionEntrega dirección donde se realizará la entrega
+     * @param distanciaKm distancia aproximada de entrega en kilómetros
+     */
+    public Pedido(int idPedido, String cliente, String direccionEntrega, double distanciaKm) {
         this.idPedido = idPedido;
         this.cliente = cliente;
         this.direccionEntrega = direccionEntrega;
         this.distanciaKm = distanciaKm;
-        this.repartidorAsignado = repartidorAsignado;
+        this.estado = EstadoPedido.PENDIENTE;
     }
 
 
+    /**
+     * Obtiene el identificador del pedido.
+     *
+     * @return identificador del pedido
+     */
     public int getIdPedido() {
         return idPedido;
     }
 
+    /**
+     * Obtiene el nombre del cliente.
+     *
+     * @return nombre del cliente
+     */
     public String getCliente() {
         return cliente;
     }
 
+    /**
+     * Obtiene la dirección de entrega.
+     *
+     * @return dirección de entrega del pedido
+     */
     public String getDireccion() {
         return direccionEntrega;
     }
 
+    /**
+     * Obtiene la distancia aproximada del pedido.
+     *
+     * @return distancia de entrega en kilómetros
+     */
     public double getDistanciaKm() {
         return distanciaKm;
     }
 
-    public String getRepartidorAsignado() {
-        return repartidorAsignado;
+    /**
+     * Obtiene el estado actual del pedido.
+     *
+     * @return estado actual del pedido
+     */
+    public EstadoPedido getEstado() {
+        return estado;
     }
 
-    public boolean isCancelado() { return cancelado; }
-
-    public void setCancelado(boolean cancelado) { this.cancelado = cancelado; }
+    /**
+     * Actualiza el estado del pedido.
+     *
+     * @param estado nuevo estado del pedido
+     */
+    public void setEstado(EstadoPedido estado) {
+        this.estado = estado;
+    }
 
     /**
      * Muestra en consola los datos principales y el tiempo estimado del pedido.
@@ -54,8 +92,8 @@ public abstract class Pedido {
         System.out.println("Cliente: " + getCliente());
         System.out.println("Direccion: " + getDireccion());
         System.out.println("Distancia Km: " + getDistanciaKm());
-        System.out.println("Repartidor Asignado: " + getRepartidorAsignado());
         System.out.println("Tiempo de entrega: " + calcularTiempoEntrega() + " minutos aprox.");
+        System.out.println("Estado: " + getEstado());
         System.out.println("");
     }
 
@@ -66,5 +104,19 @@ public abstract class Pedido {
      */
     public abstract int calcularTiempoEntrega();
 
-
+    /**
+     * Devuelve una representación en texto del pedido con sus datos principales.
+     *
+     * @return texto con los datos del pedido
+     */
+    @Override
+    public String toString() {
+        return "Pedido{" +
+                "idPedido=" + idPedido +
+                ", cliente='" + cliente + '\'' +
+                ", direccionEntrega='" + direccionEntrega + '\'' +
+                ", distanciaKm=" + distanciaKm +
+                ", estado='" + estado + '\'' +
+                '}';
+    }
 }

@@ -60,7 +60,7 @@ public class ControladorDeEnvios implements Rastreable {
      * @param pedido pedido que fue entregado
      */
     public void registrarEntrega(Pedido pedido) {
-        historial.add("Pedido #" + pedido.getIdPedido() + " - entregado por " + pedido.getRepartidorAsignado()
+        historial.add("Pedido #" + pedido.getIdPedido() + " Entregado"
         );
     }
 }

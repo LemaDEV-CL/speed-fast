@@ -11,8 +11,18 @@ public class PedidoEncomienda extends Pedido implements Asignable, Cancelable, D
     private int peso;
     private int volumen;
 
-    public PedidoEncomienda(int idPedido, String cliente, String direccionEntrega, double distanciaKm, String repartidorAsignado, int peso, int volumen) {
-        super(idPedido, cliente, direccionEntrega, distanciaKm, repartidorAsignado);
+    /**
+     * Crea un pedido de encomienda con datos de entrega, peso y volumen.
+     *
+     * @param idPedido identificador único del pedido
+     * @param cliente nombre del cliente que recibe la encomienda
+     * @param direccionEntrega dirección donde se realizará la entrega
+     * @param distanciaKm distancia aproximada de entrega en kilómetros
+     * @param peso peso de la encomienda
+     * @param volumen volumen de la encomienda
+     */
+    public PedidoEncomienda(int idPedido, String cliente, String direccionEntrega, double distanciaKm, int peso, int volumen) {
+        super(idPedido, cliente, direccionEntrega, distanciaKm);
         this.peso = peso;
         this.volumen = volumen;
     }

@@ -12,8 +12,17 @@ public class PedidoExpress extends Pedido implements Asignable, Cancelable, Desp
 
     private String tienda;
 
-    public PedidoExpress(int idPedido, String cliente, String direccionEntrega, double distanciaKm,  String repartidorAsignado, String tienda) {
-        super(idPedido, cliente, direccionEntrega, distanciaKm, repartidorAsignado);
+    /**
+     * Crea un pedido express asociado a una tienda.
+     *
+     * @param idPedido identificador único del pedido
+     * @param cliente nombre del cliente que recibe el pedido
+     * @param direccionEntrega dirección donde se realizará la entrega
+     * @param distanciaKm distancia aproximada de entrega en kilómetros
+     * @param tienda tienda asociada al pedido express
+     */
+    public PedidoExpress(int idPedido, String cliente, String direccionEntrega, double distanciaKm, String tienda) {
+        super(idPedido, cliente, direccionEntrega, distanciaKm);
         this.tienda = tienda;
     }
 

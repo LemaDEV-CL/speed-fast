@@ -1,107 +1,96 @@
 package cl.lema.app;
 
+import cl.lema.hilos.Repartidor;
 import cl.lema.models.*;
+import cl.lema.servicio.ZonaDeCarga;
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Clase principal del sistema SpeedFast.
- * Crea pedidos y repartidores de ejemplo y ejecuta sus entregas de forma concurrente
- * mediante un ExecutorService.
+ * Crea pedidos de ejemplo, los agrega a una zona de carga compartida
+ * y ejecuta varios repartidores de forma concurrente mediante hilos.
  */
 public class Main {
 
-    public static void main(String[] args) {
-
+    /**
+     * Punto de entrada de la simulación.
+     * Inicializa la zona de carga, crea los pedidos y coordina el inicio
+     * y término de los hilos repartidores.
+     *
+     * @param args argumentos recibidos por consola; no se utilizan en esta simulación
+     * @throws InterruptedException si se interrumpe la carga de pedidos o la espera de hilos
+     */
+    public static void main(String[] args) throws InterruptedException {
+        ZonaDeCarga zonaDeCarga = new ZonaDeCarga();
         Pedido pedido1 = new PedidoComida(
                 101,
-                "Juan Pérez",
+                "Don Hambre Feroz",
                 "Av. Pajaritos 2500",
-                4.5,
-                "Camila",
-                "McDonalds",
-                15
+                12,
+                "La Cocoa",
+                10
         );
 
-        Pedido pedido2 = new PedidoExpress(
+        Pedido pedido2 = new PedidoEncomienda(
                 102,
                 "María Soto",
                 "Las Parcelas 1800",
                 6.2,
-                "Camila",
-                "Falabella"
-        );
-
-        Pedido pedido3 = new PedidoEncomienda(
-                201,
-                "Carlos Díaz",
-                "Alameda 1500",
                 5,
-                "Luis",
-                4,
-                8
-        );
-
-        Pedido pedido4 = new PedidoComida(
-                202,
-                "Ana Torres",
-                "Las Rejas 850",
-                3.7,
-                "Luis",
-                "Domino",
                 20
         );
 
+        Pedido pedido3 = new PedidoExpress(
+                103,
+                "Pedro González",
+                "Av. Providencia 1200",
+                8.5,
+                "Falabella"
+        );
+
+        Pedido pedido4 = new PedidoComida(
+                104,
+                "Carolina Pérez",
+                "Irarrázaval 2500",
+                4.7,
+                "McDonalds",
+                15
+        );
+
         Pedido pedido5 = new PedidoExpress(
-                301,
-                "Felipe Rojas",
-                "Providencia 2200",
-                7,
-                "Pedro",
+                105,
+                "Luis Martínez",
+                "Alameda 3200",
+                10.3,
                 "Paris"
         );
 
-        Pedido pedido6 = new PedidoEncomienda(
-                302,
-                "Laura González",
-                "Irarrázaval 1350",
-                5.5,
-                "Pedro",
-                2,
-                6
+        zonaDeCarga.agregarPedido(pedido1);
+        zonaDeCarga.agregarPedido(pedido2);
+        zonaDeCarga.agregarPedido(pedido3);
+        zonaDeCarga.agregarPedido(pedido4);
+        zonaDeCarga.agregarPedido(pedido5);
+
+        Thread repartidor1 =
+                new Thread(new Repartidor("Camila", zonaDeCarga));
+
+        Thread repartidor2 =
+                new Thread(new Repartidor("Luis", zonaDeCarga));
+
+        Thread repartidor3 =
+                new Thread(new Repartidor("Pedro", zonaDeCarga));
+
+        repartidor1.start();
+        repartidor2.start();
+        repartidor3.start();
+
+        repartidor1.join();
+        repartidor2.join();
+        repartidor3.join();
+
+        System.out.println();
+        System.out.println(
+                "Todos los pedidos han sido entregados correctamente"
         );
-
-        List<Pedido> pedidosCamila = List.of(pedido1, pedido2);
-        List<Pedido> pedidosLuis = List.of(pedido3, pedido4);
-        List<Pedido> pedidosPedro = List.of(pedido5, pedido6);
-
-        Repartidor camila = new Repartidor("Camila", pedidosCamila);
-        Repartidor luis = new Repartidor("Luis", pedidosLuis);
-        Repartidor pedro = new Repartidor("Pedro", pedidosPedro);
-
-        ExecutorService executor = Executors.newFixedThreadPool(3);
-
-        executor.execute(camila);
-        executor.execute(luis);
-        executor.execute(pedro);
-        executor.shutdown();
-
-        try {
-
-            boolean finalizado = executor.awaitTermination(1, TimeUnit.MINUTES);
-            if (finalizado) {
-                System.out.println("=== Todos los repartidores finalizaron ===");
-            } else {
-                System.out.println("=== La simulación no finalizó dentro del tiempo esperado ===");
-            }
-
-        } catch (InterruptedException e) {
-
-            Thread.currentThread().interrupt();
-            System.out.println("=== La ejecución principal fue interrumpida ===");
-        }
     }
 }

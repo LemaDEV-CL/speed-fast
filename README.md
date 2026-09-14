@@ -1,60 +1,91 @@
 # Speed Fast
 
-Proyecto desarrollado en Java para practicar los contenidos de Programación Orientada a Objetos de la asignatura.
+Proyecto académico desarrollado en Java para la asignatura **Programación Orientada a Objetos II**, correspondiente al primer año de la carrera.
 
-El programa representa un sistema simple de pedidos de la empresa ficticia **Speed Fast**, utilizando distintos tipos de pedidos como comida, encomienda y express.
+El programa representa un sistema simple de pedidos de la empresa ficticia **Speed Fast**. La idea principal es practicar los contenidos de POO mediante distintos tipos de pedidos, repartidores y una simulación básica de entregas concurrentes.
 
 ## Avance por semana
 
-- **Semana 1:** creación del proyecto y de las primeras clases para representar pedidos y repartidores.
-- **Semana 2:** uso de herencia mediante la clase `Pedido` y sus clases hijas. También se incorpora el método abstracto `calcularTiempoEntrega()`, implementado de forma diferente según el tipo de pedido.
-- **Semana 3:** incorporación de interfaces para representar las distintas acciones que puede realizar un pedido y uso de un controlador para ejecutar estas acciones.
-- **Semana 4:** incorporación de concurrencia. Cada `Repartidor` implementa `Runnable` y procesa su propia lista de pedidos. Los repartidores se ejecutan de forma simultánea mediante `ExecutorService` y se utiliza `Thread.sleep()` para simular tiempos de entrega aleatorios.
+- **Semana 1:** creación del proyecto Maven y de las primeras clases del sistema. Se trabajó con objetos de pedido, tipos de pedido y una primera interfaz para asignar repartidores.
+- **Semana 2:** aplicación de herencia usando `Pedido` como clase base abstracta. Las clases `PedidoComida`, `PedidoEncomienda` y `PedidoExpress` sobrescriben `calcularTiempoEntrega()` según su propia lógica.
+- **Semana 3:** incorporación de interfaces para separar comportamientos: asignar, despachar, cancelar y rastrear pedidos. También se agregó `ControladorDeEnvios` para centralizar acciones y registrar entregas.
+- **Semana 4:** incorporación de concurrencia. `Repartidor` implementa `Runnable`, se crean varios hilos y se usa `Thread.sleep()` para simular el tiempo que tarda una entrega.
+- **Semana 5:** se agregó `ZonaDeCarga` como cola compartida de pedidos. Los repartidores retiran pedidos desde esa zona usando una `BlockingQueue` protegida con `ReentrantLock`, y cada pedido cambia de estado mediante el enum `EstadoPedido`.
 
 ## Conceptos aplicados
 
 - Clases y objetos.
 - Encapsulamiento mediante atributos y métodos de acceso.
 - Herencia entre `Pedido` y sus clases hijas.
-- Clase y método abstracto.
+- Clase abstracta y método abstracto.
 - Sobreescritura de métodos con `@Override`.
-- Polimorfismo mediante la clase `Pedido`.
-- Interfaces para definir comportamientos.
-- Listas de objetos con `List`.
+- Polimorfismo al trabajar con referencias de tipo `Pedido`.
+- Interfaces para definir comportamientos comunes.
+- Enumeraciones mediante `EstadoPedido`.
+- Colecciones y colas de objetos.
 - Implementación de `Runnable`.
 - Programación concurrente con múltiples hilos.
+- Uso de `Thread`, `start()` y `join()`.
 - Uso de `Thread.sleep()` para simular tiempos de ejecución.
-- Administración de tareas concurrentes mediante `ExecutorService`.
+- Uso de `BlockingQueue`, `LinkedBlockingQueue` y `ReentrantLock`.
 - Manejo de `InterruptedException`.
 
 ## Clases principales
 
-- `Main`: crea los pedidos y repartidores de ejemplo y administra la ejecución concurrente.
-- `Pedido`: clase abstracta que contiene los datos y comportamientos comunes de los pedidos.
-- `PedidoComida`: representa un pedido realizado a un restaurante.
-- `PedidoEncomienda`: representa el envío de una encomienda.
-- `PedidoExpress`: representa un pedido con entrega express.
-- `Repartidor`: implementa `Runnable` y procesa secuencialmente los pedidos que tiene asignados.
-- `ControladorDeEnvios`: contiene funcionalidades desarrolladas durante la Semana 3 para trabajar con las acciones de los pedidos.
+- `Main`: crea pedidos de ejemplo, los agrega a la zona de carga y ejecuta tres repartidores en hilos separados.
+- `Pedido`: clase abstracta que contiene los datos comunes de todos los pedidos.
+- `PedidoComida`: representa un pedido de comida realizado a un restaurante.
+- `PedidoEncomienda`: representa el envío de una encomienda con peso y volumen.
+- `PedidoExpress`: representa un pedido express asociado a una tienda.
+- `EstadoPedido`: enum que representa los estados `PENDIENTE`, `EN_REPARTO` y `ENTREGADO`.
+- `ZonaDeCarga`: administra la cola compartida desde donde los repartidores retiran pedidos.
+- `Repartidor`: implementa `Runnable` y procesa pedidos desde la zona de carga.
+- `ControladorDeEnvios`: contiene funcionalidades trabajadas en Semana 3 para asignar, despachar, cancelar y registrar entregas.
 
 ## Interfaces
 
-- `Asignable`: permite asignar un repartidor.
-- `Despachable`: permite despachar un pedido.
-- `Cancelable`: permite cancelar un pedido cuando corresponda.
-- `Rastreable`: permite realizar las acciones de seguimiento definidas en el proyecto.
+- `Asignable`: define que un pedido puede recibir un repartidor.
+- `Despachable`: define que un pedido puede ser despachado.
+- `Cancelable`: define que un pedido puede ser cancelado.
+- `Rastreable`: define la consulta de historial de entregas.
 
 ## Funcionamiento actual
 
-Al ejecutar el programa se crean seis pedidos y se distribuyen entre tres repartidores: Camila, Luis y Pedro. Cada repartidor recibe dos pedidos y los procesa secuencialmente.
+Al ejecutar el programa se crea una `ZonaDeCarga` y se agregan cinco pedidos de distintos tipos. Luego se crean tres repartidores: Camila, Luis y Pedro.
 
-Los tres repartidores son enviados a un `ExecutorService` con tres hilos, permitiendo que trabajen de forma concurrente. Cada entrega utiliza una pausa aleatoria para simular su duración. Finalmente, el programa espera a que todos los repartidores terminen antes de cerrar la simulación.
+Cada repartidor se ejecuta en su propio `Thread` y comparte la misma zona de carga. Mientras existan pedidos disponibles, un repartidor retira un pedido, cambia su estado a `EN_REPARTO`, espera dos segundos para simular la entrega y finalmente cambia el estado a `ENTREGADO`.
+
+El método `main()` inicia los tres hilos con `start()` y luego espera su término usando `join()`. Cuando todos los repartidores finalizan, se muestra un mensaje indicando que todos los pedidos fueron entregados correctamente.
+
+## Estructura general
+
+```text
+src/main/java/cl/lema
++-- app
+|   +-- Main.java
++-- hilos
+|   +-- Repartidor.java
++-- interfaces
+|   +-- Asignable.java
+|   +-- Cancelable.java
+|   +-- Despachable.java
+|   +-- Rastreable.java
++-- models
+|   +-- EstadoPedido.java
+|   +-- Pedido.java
+|   +-- PedidoComida.java
+|   +-- PedidoEncomienda.java
+|   +-- PedidoExpress.java
++-- servicio
+    +-- ControladorDeEnvios.java
+    +-- ZonaDeCarga.java
+```
 
 ## Requisitos
 
 - Java 23.
 - Maven.
-- Un IDE para Java, por ejemplo IntelliJ IDEA.
+- IDE para Java
 
 ## Cómo ejecutar el proyecto
 

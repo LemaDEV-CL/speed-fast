@@ -14,8 +14,18 @@ public class PedidoComida extends Pedido implements Asignable, Cancelable, Despa
     private int tiempoPreparacion;
 
 
-    public PedidoComida(int idPedido, String cliente, String direccionEntrega, double distanciaKm, String repartidorAsignado, String restaurante, int tiempoPreparacion) {
-        super(idPedido, cliente, direccionEntrega, distanciaKm, repartidorAsignado);
+    /**
+     * Crea un pedido de comida con los datos del cliente y del restaurante.
+     *
+     * @param idPedido identificador único del pedido
+     * @param cliente nombre del cliente que recibe el pedido
+     * @param direccionEntrega dirección donde se realizará la entrega
+     * @param distanciaKm distancia aproximada de entrega en kilómetros
+     * @param restaurante nombre del restaurante asociado al pedido
+     * @param tiempoPreparacion tiempo de preparación informado para la comida
+     */
+    public PedidoComida(int idPedido, String cliente, String direccionEntrega, double distanciaKm, String restaurante, int tiempoPreparacion) {
+        super(idPedido, cliente, direccionEntrega, distanciaKm);
         this.restaurante = restaurante;
         this.tiempoPreparacion = tiempoPreparacion;
     }
